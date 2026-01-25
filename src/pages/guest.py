@@ -3,7 +3,10 @@ from src.pages.base import BasePage
 
 class GuestPage(BasePage):
     locators = {
-        "signin_button": ("XPATH", "//a[@data-tracking-control-name='guest_homepage-basic_nav-header-signin']")
+        "signin_button": (
+            "XPATH",
+            "//a[@data-tracking-control-name='guest_homepage-basic_nav-header-signin']",
+        )
     }
 
     def __init__(self, driver):

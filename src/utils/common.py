@@ -9,6 +9,7 @@ import tempfile
 from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
 
+
 def get_random_delay(start, end):
     return random.choice([start, end])
 
@@ -25,6 +26,7 @@ def get_page_soup(driver):
 def save_to_json(filename, data):
     with open(filename, "w") as f:
         json.dump(data, f)
+
 
 def load_cookies_in_driver_before_site_load(driver, cookies_pkl_file):
     cookies = pickle.load(open(cookies_pkl_file, "rb"))
@@ -49,8 +51,8 @@ def load_cookies_in_driver_before_site_load(driver, cookies_pkl_file):
 
 
 def load_cookies_in_driver(
-        driver,
-        cookies_pkl_file,
+    driver,
+    cookies_pkl_file,
 ):
     for cookie in pickle.load(open(cookies_pkl_file, "rb")):
         expiry = cookie.get("expiry", None)
@@ -116,13 +118,15 @@ def generate_log(directory_name, data):
     log_filename_date = datetime.now().strftime("%Y-%m-%d")
 
     # Format the date and time for use in a file name
-    if not os.path.exists(f'ZkekeLogs/{directory_name}'):
-        os.makedirs(f'ZkekeLogs/{directory_name}')
+    if not os.path.exists(f"ZkekeLogs/{directory_name}"):
+        os.makedirs(f"ZkekeLogs/{directory_name}")
 
     # Get current date and time
-    with open(f'ZkekeLogs/{directory_name}/{log_filename_date}.txt', 'a', encoding="utf-8") as f:
+    with open(
+        f"ZkekeLogs/{directory_name}/{log_filename_date}.txt", "a", encoding="utf-8"
+    ) as f:
         # Write some content to the file
-        f.write(str(data) + '\n')
+        f.write(str(data) + "\n")
 
     # # it will delete files older then 7 days
     # delete_old_files_by_name(f'ScrapperLogs/{directory_name}')

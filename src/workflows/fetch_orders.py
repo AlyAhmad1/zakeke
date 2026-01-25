@@ -12,6 +12,7 @@ from src.utils.common import (
     save_to_json,
 )
 
+
 def execute_fetch_orders():
     automation_name = "Linkedin Followers Onboarding"
     try:
@@ -25,11 +26,7 @@ def execute_fetch_orders():
         options.add_argument("--disable-gpu")
         options.add_argument("--disable-blink-features=AutomationControlled")
 
-        driver = uc.Chrome(
-            version_main=143,
-            options=options,
-            headless=False
-        )
+        driver = uc.Chrome(version_main=143, options=options, headless=False)
         guest_page = GuestPage(driver)
         login_page = LoginPage(driver)
         dashboard_page = DashboardPage(driver)
@@ -44,5 +41,5 @@ def execute_fetch_orders():
     except Exception as e:
         # send exception alert to slack channel
         exception_data = traceback.format_exc()
-        response_data = {'error': 'Server Error'}
+        response_data = {"error": "Server Error"}
         print(exception_data, "<<<<<<<<<")

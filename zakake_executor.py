@@ -27,9 +27,7 @@ if __name__ == "__main__":
         #     print("-[")
         #     wait_with_random_delay(10, 20)
 
-
     except KeyboardInterrupt:
         pass
     except Exception as e:
         exception_data = traceback.format_exc()
-

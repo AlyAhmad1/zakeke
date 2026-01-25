@@ -1,8 +1,19 @@
 import os
 import time
 from src.pages.base import BasePage
-from src.utils.common import get_random_delay, wait_with_random_delay, save_cookies, load_cookies_in_driver_before_site_load
-from src.utils.constants import (ZAKEKE_EMAIL, ZAKEKE_BASE_URL, ZAKEKE_COOKIES_FILENAME, ROOT_PATH, )
+from src.utils.common import (
+    get_random_delay,
+    wait_with_random_delay,
+    save_cookies,
+    load_cookies_in_driver_before_site_load,
+)
+from src.utils.constants import (
+    ZAKEKE_EMAIL,
+    ZAKEKE_LOGIN_URL,
+    ZAKEKE_COOKIES_FILENAME,
+    ZAKEKE_DASHBOARD_URL,
+    ROOT_PATH,
+)
 
 
 class LoginPage(BasePage):
@@ -30,49 +41,43 @@ class LoginPage(BasePage):
         # Get the absolute path of the current directory
         current_dir = os.path.abspath(__file__)
 
-        print(".......")
+        print(f".......{ROOT_PATH}/{ZAKEKE_COOKIES_FILENAME}")
         # Add cookies from file if present
-        if os.path.exists(f'{ROOT_PATH}/{ZAKEKE_COOKIES_FILENAME}'):
-            load_cookies_in_driver_before_site_load(self.driver, f'{ROOT_PATH}/{ZAKEKE_COOKIES_FILENAME}')
-            self.driver.get(ZAKEKE_BASE_URL)
-        else:
-            self.driver.get(ZAKEKE_BASE_URL)
-
-        random_delay = get_random_delay(10, 20)
-
-        # verify login
-        try:
-            dashboard_page.wait_for_organization(delay=random_delay)
+        if os.path.exists(f"{ROOT_PATH}/{ZAKEKE_COOKIES_FILENAME}"):
+            load_cookies_in_driver_before_site_load(
+                self.driver, f"{ROOT_PATH}/{ZAKEKE_COOKIES_FILENAME}"
+            )
+            self.driver.get(ZAKEKE_DASHBOARD_URL)
             logged_in = True
-        except Exception as err:
-            # not able to access feed page
-            print("Exception: ", str(err))
+        else:
+            self.driver.get(ZAKEKE_LOGIN_URL)
 
         if not logged_in:
-            # Click on Sign In page
-            random_delay = get_random_delay(6, 11)
-            guest_page.click_sigin_button(delay=random_delay)
-
-            # wait for username field to load
             random_delay = get_random_delay(10, 15)
-            self.wait_for_username_field(delay=random_delay)
+            self.wait_for_email_field(delay=random_delay)
 
             # login by giving username and password
             self.enter_email(ZAKEKE_EMAIL)
 
             # click on login button
-            wait_with_random_delay(7, 15)
+            wait_with_random_delay(3, 5)
             self.click_continue_button()
 
             while True:
-                print("---- enter email otp ---")
-                random_delay = get_random_delay(10, 15)
-                dashboard_page.wait_for_organization(delay=random_delay)
-                break
+                try:
+                    wait_with_random_delay(10, 15)
+                    dashboard_page.wait_for_organization(delay=15)
+                    break
+                except:
+                    pass
 
+            wait_with_random_delay(10, 15)
+            print("<<<<<<<<<<<<")
+            dashboard_page.click_proceed_button()
+            wait_with_random_delay(10, 15)
             # save cookies
             # TODO: Save cookies to some cloud storage
-            save_cookies(ZAKEKE_EMAIL, self.driver.get_cookies())
+            save_cookies(ZAKEKE_COOKIES_FILENAME, self.driver.get_cookies())
 
             logged_in = True
         else:
