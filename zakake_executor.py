@@ -4,7 +4,6 @@ import multiprocessing as mp
 from src.utils.common import (
     wait_with_random_delay,
     remove_temp_folders,
-    generate_log,
 )
 
 from src.workflows.fetch_orders import execute_fetch_orders
@@ -13,6 +12,7 @@ if __name__ == "__main__":
     try:
         print("Starting Guest...")
         execute_fetch_orders()
+        remove_temp_folders()
 
         # while True:
         #     execute_fetch_orders()

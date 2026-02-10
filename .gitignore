@@ -38,7 +38,7 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
-/ScrapperLogs
+/ZkekeLogs
 /.venv
 venv/
 /**/__pycache__/

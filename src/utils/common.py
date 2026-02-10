@@ -89,7 +89,7 @@ def remove_temp_folders():
         print(f"Error: The path {path} does not exist.")
 
 
-def delete_old_files_by_name(folder_path, days=7):
+def delete_old_files_by_name(folder_path, days=30):
     # Calculate the cutoff date
     cutoff_date = datetime.now() - timedelta(days=days)
 
@@ -125,8 +125,39 @@ def generate_log(directory_name, data):
     with open(
         f"ZkekeLogs/{directory_name}/{log_filename_date}.txt", "a", encoding="utf-8"
     ) as f:
-        # Write some content to the file
-        f.write(str(data) + "\n")
 
-    # # it will delete files older then 7 days
-    # delete_old_files_by_name(f'ScrapperLogs/{directory_name}')
+        for item in data:
+            f.write(f"{str(item).strip()}\n")
+
+    # # it will delete files older than 7 days
+    delete_old_files_by_name(f"ZkekeLogs/{directory_name}")
+
+
+def read_logs(directory_name):
+    # this function will read the latest log file from directory
+
+    directory_path = f"ZkekeLogs/{directory_name}"
+    if os.path.exists(directory_path):
+        date_files = []
+        for filename in os.listdir(directory_path):
+            if filename.endswith(".txt"):
+                name_without_ext = filename.replace(".txt", "")
+                try:
+                    file_date = datetime.strptime(name_without_ext, "%Y-%m-%d")
+                    date_files.append((file_date, filename))
+                except ValueError:
+                    # Skip files that don't match date format
+                    pass
+
+        if not date_files:
+            # No valid date-based files found in directory
+            return []
+
+        # Get latest file by date
+        latest_file = max(date_files, key=lambda x: x[0])[1]
+        latest_file_path = os.path.join(directory_path, latest_file)
+
+        with open(latest_file_path, "r", encoding="utf-8") as f:
+            return [line.rstrip("\n") for line in f]
+
+    return []

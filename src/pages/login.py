@@ -35,13 +35,9 @@ class LoginPage(BasePage):
     def click_continue_button(self, delay=5):
         self.click_element(self.continue_button, delay)
 
-    def login(self, dashboard_page, guest_page):
+    def login(self, dashboard_page):
         logged_in = False
 
-        # Get the absolute path of the current directory
-        current_dir = os.path.abspath(__file__)
-
-        print(f".......{ROOT_PATH}/{ZAKEKE_COOKIES_FILENAME}")
         # Add cookies from file if present
         if os.path.exists(f"{ROOT_PATH}/{ZAKEKE_COOKIES_FILENAME}"):
             load_cookies_in_driver_before_site_load(
@@ -72,11 +68,10 @@ class LoginPage(BasePage):
                     pass
 
             wait_with_random_delay(10, 15)
-            print("<<<<<<<<<<<<")
+
             dashboard_page.click_proceed_button()
             wait_with_random_delay(10, 15)
             # save cookies
-            # TODO: Save cookies to some cloud storage
             save_cookies(ZAKEKE_COOKIES_FILENAME, self.driver.get_cookies())
 
             logged_in = True

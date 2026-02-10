@@ -4,7 +4,7 @@ import datetime
 import undetected_chromedriver as uc
 
 from src.pages.dashboard import DashboardPage
-from src.pages.guest import GuestPage
+from src.pages.order import OrderPage
 from src.pages.login import LoginPage
 
 from src.utils.common import (
@@ -14,12 +14,8 @@ from src.utils.common import (
 
 
 def execute_fetch_orders():
-    automation_name = "Linkedin Followers Onboarding"
+    automation_name = "zakake product scraper"
     try:
-        # load Chrome extension to use VPN.
-        # chrome_options = uc.ChromeOptions()
-        # driver = uc.Chrome(version_main=120, options=chrome_options)
-        print("------------")
         options = uc.ChromeOptions()
         options.add_argument("--no-sandbox")
         options.add_argument("--disable-dev-shm-usage")
@@ -27,19 +23,20 @@ def execute_fetch_orders():
         options.add_argument("--disable-blink-features=AutomationControlled")
 
         driver = uc.Chrome(version_main=143, options=options, headless=False)
-        guest_page = GuestPage(driver)
         login_page = LoginPage(driver)
         dashboard_page = DashboardPage(driver)
+        order_page = OrderPage(driver)
 
-        logged_in = login_page.login(dashboard_page, guest_page)
+        login_page.login(dashboard_page)
+        wait_with_random_delay(5, 10)
 
-        time.sleep(300)
+        order_page.list_today_orders()
+        order_page.download_orders()
 
         # Quit chrome session
         driver.quit()
 
     except Exception as e:
-        # send exception alert to slack channel
         exception_data = traceback.format_exc()
         response_data = {"error": "Server Error"}
         print(exception_data, "<<<<<<<<<")
