@@ -2,6 +2,7 @@ import traceback
 import time
 import datetime
 import undetected_chromedriver as uc
+from src.utils.constants import CHROME_VERSION
 
 from src.pages.dashboard import DashboardPage
 from src.pages.order import OrderPage
@@ -22,7 +23,7 @@ def execute_fetch_orders():
         options.add_argument("--disable-gpu")
         options.add_argument("--disable-blink-features=AutomationControlled")
 
-        driver = uc.Chrome(version_main=143, options=options, headless=False)
+        driver = uc.Chrome(version_main=CHROME_VERSION, options=options, headless=False)
         login_page = LoginPage(driver)
         dashboard_page = DashboardPage(driver)
         order_page = OrderPage(driver)
