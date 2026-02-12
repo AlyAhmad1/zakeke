@@ -50,12 +50,20 @@ class OrderPage(BasePage):
 
     def download_orders(self):
         for i in range(3):
-            self.driver.find_element(By.XPATH, f'//li[@id="tab:r0:{i}"]').click()
-            wait_with_random_delay(3, 5)
+            try:
+                self.driver.find_element(By.XPATH, f'//li[@id="tab:r0:{i}"]').click()
+                wait_with_random_delay(3, 5)
+                order_panel = self.driver.find_element(
+                    By.XPATH, f'//div[@id="panel:r0:{i}"]'
+                )
 
-            order_panel = self.driver.find_element(
-                By.XPATH, f'//div[@id="panel:r0:{i}"]'
-            )
+            except:
+                self.driver.find_element(By.XPATH, f'//li[@id="tab:r1:{i}"]').click()
+                wait_with_random_delay(3, 5)
+                order_panel = self.driver.find_element(
+                    By.XPATH, f'//div[@id="panel:r1:{i}"]'
+                )
+
             wait_with_random_delay(3, 5)
 
             try:
