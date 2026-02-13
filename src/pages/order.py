@@ -50,6 +50,7 @@ class OrderPage(BasePage):
 
     def download_orders(self):
         for i in range(3):
+            self.scroll_to_page_top()
             try:
                 self.driver.find_element(By.XPATH, f'//li[@id="tab:r0:{i}"]').click()
                 wait_with_random_delay(3, 5)
