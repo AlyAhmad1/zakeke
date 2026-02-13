@@ -100,7 +100,8 @@ class OrderPage(BasePage):
                             break
 
                         try:
-                            last_span.click()
+                            # last_span.click()
+                            self.click_element(last_span, 5)
                             print(f"✓ Clicked last span in row {index}")
                             wait_with_random_delay(3, 5)
                             if i == 2:
